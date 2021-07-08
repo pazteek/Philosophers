@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbabeau <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 14:43:39 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/07 20:07:49 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/08 11:29:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_chrono
 	int				status;
 	int				etat;
 	long long		time;
+	long long		start;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	general;
 	pthread_mutex_t	display;
@@ -41,7 +42,6 @@ typedef struct s_chrono
 
 typedef struct s_philosopher
 {
-	long long		time_to_live;
 	long long		last_eat;
 	int				num;
 	int				each;

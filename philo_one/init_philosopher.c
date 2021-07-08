@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_philosopher.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbabeau <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:51:12 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/07 19:31:42 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/08 11:36:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,16 @@ void	init_pthread(int number_of_philosopher,
 
 	i = -1;
 	pthread_mutex_lock(&philosophers->chrono->general);
-	philosophers[0].time_to_live = ft_time();
+	philosophers[0].chrono->start = ft_time();
 	while (++i < number_of_philosopher)
 	{
-		philosophers[i].time_to_live = philosophers[0].time_to_live;
+			
+		philosophers[i].last_eat = philosophers[0].chrono->start;
 		pthread_create(&philosophers[i].thread_id,
 			NULL, test, &philosophers[i]);
-		usleep(2000);
+		//usleep(2000);
 	}
+	pthread_mutex_lock(&philosophers->chrono->general);
 	pthread_mutex_lock(&philosophers->chrono->general);
 }
 
@@ -78,4 +80,5 @@ void	init_philosophers(int number_of_philosopher,
 	}
 	init_fork(number_of_philosopher, philosophers);
 	init_pthread(number_of_philosopher, philosophers);
+	exit(1);
 }
