@@ -46,14 +46,14 @@ static void			*test(void *arg)
 	while (1)
 	{
 		ft_test_to_live(philo, STR_THINK);
-		pthread_mutex_lock(&philo->fork[0]);
+		sem_wait(philo->fork);
 		ft_test_to_live(philo, STR_TAKEN);
-		pthread_mutex_lock(&philo->fork[1]);
+		sem_wait(philo->fork);
 		ft_test_to_live(philo, STR_TAKEN);
 		ft_test_to_live(philo, STR_EAT);
 		usleep(philo->chrono->time_to_eat * 1000);
-		pthread_mutex_unlock(&philo->fork[0]);
-		pthread_mutex_unlock(&philo->fork[1]);
+		sem_post(philo->fork);
+		sem_post(philo->fork);
 		ft_test_to_live(philo, STR_SLEEP);
 		usleep(philo->chrono->time_to_sleep * 1000);
 	}
@@ -64,18 +64,16 @@ void				initialization_fork(int number_of_philosopher,
 									t_philosopher *philosophers)
 {
 	int				i;
-	pthread_mutex_t	*fork;
+	sem_t			*fork;
 
-	fork = malloc(sizeof(pthread_mutex_t) * number_of_philosopher);
 	i = -1;
 	while (++i < number_of_philosopher)
-		pthread_mutex_init(&fork[i], NULL);
+		fork = sem_open("frock",O_CREAT, NULL, number_of_philosopher);
 	i = -1;
 	while (++i < number_of_philosopher)
 	{
 		philosophers[i].num = i;
-		philosophers[i].fork[0] = fork[i];
-		philosophers[i].fork[1] = fork[(i + 1) % number_of_philosopher];
+		philosophers[i].fork = fork;
 	}
 }
 
@@ -83,20 +81,27 @@ void				initialization_pthread(int number_of_philosopher,
 						t_philosopher *philosophers)
 {
 	int	i;
+	pid_t	pid;
 
 	i = -1;
+	pid = 0;
 	while (++i < number_of_philosopher)
-		pthread_create(&philosophers[i].thread_id,
-					NULL, test, &philosophers[i]);
+	{
+		if (pid != 0|| i == 0)
+			pid = fork();
+		if ( pid != 0)
+			philosophers[i].thread_id = &pid;
+		if (pid == 0)
+			test(&philosophers[i]);
+	}
 }
 
 void				initialization_philosophers(int number_of_philosopher,
-		t_chrono *all, t_philosopher *philosophers, pthread_mutex_t *general)
+		t_chrono *all, t_philosopher *philosophers)
 {
 	int	i;
 
 	i = -1;
-	all->general = *general;
 	while (++i < all->number_of_philosopher)
 		philosophers[i].chrono = all;
 }
@@ -106,7 +111,6 @@ int					main(int argv, char **argc)
 	t_chrono			all;
 	t_philosopher		*philosophers;
 	pthread_mutex_t		*fork;
-	pthread_mutex_t		general;
 	int					i;
 
 	i = -1;
@@ -117,11 +121,8 @@ int					main(int argv, char **argc)
 	if (argv == 6)
 		all.number_of_each = atoi(argc[5]);
 	philosophers = malloc(sizeof(t_philosopher) * all.number_of_philosopher);
-	pthread_mutex_init(&general, NULL);
-	while (++i < all.number_of_philosopher)
-		philosophers[i].general = general;
 	initialization_philosophers(all.number_of_philosopher, &all,
-			philosophers, &general);
+			philosophers);
 	initialization_fork(all.number_of_philosopher, philosophers);
 	initialization_pthread(all.number_of_philosopher, philosophers);
 	while (1)

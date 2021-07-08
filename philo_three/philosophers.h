@@ -1,8 +1,13 @@
 #include <stdio.h>
-#include <pthread.h>
 #include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <semaphore.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <pthread.h>
 
 # define STR_TAKEN "has taken a fork"
 # define STR_DIED "died"
@@ -26,9 +31,8 @@ typedef struct	s_philosopher
 	long long		last_eat;
 	int				num;
 	int				etat;
-	pthread_t		thread_id;
-	pthread_mutex_t	fork[2];
-	pthread_mutex_t	general;
+	sem_t			*fork;
+	pid_t			*thread_id;
 	t_chrono		*chrono;
 }				t_philosopher;
 
