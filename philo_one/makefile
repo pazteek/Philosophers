@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/20 02:50:22 by gbabeau           #+#    #+#              #
-#    Updated: 2021/07/08 10:20:23 by user42           ###   ########.fr        #
+#    Updated: 2021/07/09 15:38:59 by gbabeau          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philo_one
 SRCS = main.c display.c life.c init_philosopher.c  check_argument.c
 OBJ = $(SRCS:.c=.o)
 CFLAGS = -Wall -Werror -Wextra
-CC = gcc -pthread
+CC = gcc -g3 -fsanitize=address -pthread
 all: $(NAME)
 
 $(NAME): $(OBJ)

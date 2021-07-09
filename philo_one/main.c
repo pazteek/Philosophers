@@ -6,7 +6,7 @@
 /*   By: gbabeau <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 12:04:29 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/07 20:06:50 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/09 11:45:45 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,21 @@ void	*test_to_live(void *arg)
 			|| philo->each < philo->chrono->number_of_each) 
 			&& (i == 1))
 	{
-		if ((philo->last_eat - philo->chrono->start
-				- philo->chrono->time_to_die) > 0)
+		if ((ft_time() - philo->last_eat > philo->chrono->time_to_die))
 		{
 			philo->chrono->time = ft_time();
-			philo->chrono->status = 0;
+			
 			i = 0;
 			philo->etat = 5;
-			philo->etat_str = STR_DIED;
-			display(philo, STR_DIED);
+			if (philo->chrono->status-- > 0)
+			{
+			pthread_mutex_lock(&philo->chrono->display);
+			(printf("%ld %d %s\n", (long)((ft_time() - philo->chrono->start)
+			 /1000), philo->num + 1, STR_DIED));
+			}
+			philo->chrono->status = 0;
 		}
 	}
-		pthread_mutex_unlock(&philo->chrono->general);
 	return (NULL);
 }
 
@@ -79,12 +82,22 @@ static	int	ft_test(int argv, char **argc)
 	return (1);
 }
 
+static void ft_free(t_chrono all, t_philosopher *philo)
+{
+	int i;
+
+	i = 0;
+		free(all.fork);
+		free(philo);
+}
+
 int	main(int argv, char **argc)
 {
 	t_chrono			all;
 	t_philosopher		*philosophers;
 	pthread_mutex_t		display;
 	pthread_mutex_t		general;
+
 	int					i;
 
 	i = -1;
@@ -101,11 +114,13 @@ int	main(int argv, char **argc)
 	all.display = display;
 	init_philosophers(all.number_of_philosopher, &all,
 		philosophers, &general);
+	pthread_join(philosophers[1].thread_id,NULL);
+	ft_free(all, philosophers);
 	pthread_mutex_lock(&all.general);
+		pthread_mutex_lock(&all.general);
 	pthread_mutex_destroy(&display);
 	pthread_mutex_destroy(&general);
-	i = -1;
-	while (++i < all.number_of_philosopher)
-		pthread_mutex_destroy(&philosophers[i].chrono->fork[0]);
+	//while (++i < all.number_of_philosopher)
+	//	pthread_mutex_destroy(&philosophers[i].chrono->fork[0]);
 	return (0);
 }

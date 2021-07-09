@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gbabeau <gbabeau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:59:23 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/08 11:59:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/07/09 14:51:59 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/*
 static void	*ft_action(void	*arg)
 {
 	t_philosopher	*philo;
@@ -21,18 +22,21 @@ static void	*ft_action(void	*arg)
 			/ 1000), philo->num + 1, philo->etat_str);
 	return (0);
 }
+*/
 
-void	*display(const t_philosopher *philo, char *etat)
+int	display(t_philosopher philo, char *etat)
 {
-	int i;
-	i = philo->etat;
-	philo->etat_str = etat;
-	pthread_mutex_lock(&philo->chrono->display);
-	//ft_action(philo);
-	pthread_create(&philo->display_id,
-			NULL, ft_action , philo);
-	if (i != 5)
-		pthread_mutex_unlock(&philo->chrono->display);
+	philo.etat_str = etat;
+	
+	if (philo.chrono->status != 0)
+	{
+		pthread_mutex_lock(&philo.chrono->display);
+		(printf("%ld %d %s\n", (long)((ft_time() - philo.chrono->start)
+			/ 1000), philo.num + 1, etat));
+	//if (philo.etat != 5)
+		pthread_mutex_unlock(&philo.chrono->display);
+		return (1);
+	}
 	return (0);
 }
 

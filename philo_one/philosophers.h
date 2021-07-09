@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gbabeau <gbabeau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 14:43:39 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/08 11:29:28 by user42           ###   ########.fr       */
+/*   Updated: 2021/07/09 15:36:17 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void				init_philosophers(int number_of_philosopher,
 						t_chrono *all, t_philosopher *philosophers,
 						pthread_mutex_t *general);
 long long			ft_time(void);
-void				*display(t_philosopher *philosophers, char *etat);
+int					display(t_philosopher philosophers, char *etat);
 void				ft_putnbr_fd(int nb, int fd);
 long long			ft_time(void);
 void				ft_usleep(long long time, long long time_2);
