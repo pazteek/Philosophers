@@ -6,7 +6,7 @@
 /*   By: gbabeau <gbabeau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 14:43:39 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/19 17:24:49 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/20 00:08:16 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_chrono
 	int				number_of_each;
 	int				status;
 	int				etat;
-	int 			finish;
+	int				finish;
 	long long		time;
 	long long		start;
 	pthread_mutex_t	*fork;

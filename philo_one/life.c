@@ -6,7 +6,7 @@
 /*   By: gbabeau <gbabeau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:56:37 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/19 18:19:32 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/19 23:59:55 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_usleep(long long time, long long time_2)
 {
 	while (ft_time() < time + time_2)
-		usleep(100);
+		usleep(250);
 }
 
 static int	ft_eat(t_philosopher *philo)
@@ -40,10 +40,10 @@ static int	ft_eat(t_philosopher *philo)
 void	*test(void *arg)
 {
 	t_philosopher	*philo;
-	pthread_t		thread_id;
 
 	philo = (t_philosopher *)arg;
-	pthread_create(&thread_id, NULL, test_to_live, philo);
+	if (philo->num % 2 == 0)
+		usleep(100);
 	philo->etat = 1;
 	philo->etat_str = NULL;
 	while ((philo->chrono->number_of_each == -1
@@ -52,17 +52,14 @@ void	*test(void *arg)
 	{
 		if (ft_eat(philo) == 0)
 			return (NULL);
-		ft_usleep(ft_time(), philo->chrono->time_to_sleep);
 		if (philo->chrono->number_of_each == philo->each)
 		{
 			philo->chrono->finish++;
-			usleep(200);
-			if (philo->chrono->finish == philo->chrono->number_of_philosopher)
-				pthread_mutex_unlock(philo->chrono->general);
 			return (NULL);
 		}
 		if (display(philo, STR_SLEEP) == 0)
 			return (NULL);
+		ft_usleep(ft_time(), philo->chrono->time_to_sleep);
 		display(philo, STR_THINK);
 	}
 	return (NULL);

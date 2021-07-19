@@ -6,7 +6,7 @@
 /*   By: gbabeau <gbabeau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 12:05:59 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/19 18:06:05 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/20 00:11:39 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,33 +20,6 @@ long long	ft_time(void)
 	gettimeofday(&time1, 0);
 	time = time1.tv_usec + time1.tv_sec * 1000000;
 	return (time);
-}
-
-void	*test_to_live(void *arg)
-{
-	t_philosopher	*philo;
-
-	philo = (t_philosopher *)arg;
-	philo->chrono->time = ft_time();
-	while ((philo->chrono->number_of_each == -1
-			|| philo->each < philo->chrono->number_of_each)
-		&& philo->chrono->status != 0)
-	{
-		if ((ft_time() - philo->last_eat > philo->chrono->time_to_die))
-		{
-			philo->chrono->status = 0;
-
-			philo->chrono->time = ft_time();
-			philo->etat = 5;
-				pthread_mutex_lock(philo->chrono->display);
-				printf("%ld %d %s\n", (long)((ft_time() - philo->chrono->start)
-					/1000), philo->num + 1, STR_DIED);
-				philo->chrono->status = 0;
-				pthread_mutex_unlock(philo->chrono->general);
-		}
-	}
-//				pthread_mutex_lock(philo->chrono->display);
-	return (NULL);
 }
 
 void	init_data(int argv, char **argc, t_chrono *all)
@@ -86,8 +59,6 @@ void	ft_free(t_chrono all, t_philosopher *philo,
 void	ft_finish(t_chrono all, t_philosopher *philo,
 		pthread_mutex_t *display, pthread_mutex_t *general)
 {
-	(void) (general);
-	(void) (display);
 	ft_free(all, philo, display, general);
 }
 
@@ -101,7 +72,6 @@ int	main(int argv, char **argc)
 
 	display = malloc(sizeof(pthread_mutex_t));
 	general = malloc(sizeof(pthread_mutex_t));
-
 	i = -1;
 	if (ft_test(argv, argc) == 0)
 		return (0);
