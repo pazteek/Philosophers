@@ -6,12 +6,11 @@
 /*   By: gbabeau <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 18:29:04 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/07 20:05:04 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/12 12:12:06 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
 
 int	ft_compare_c_to_s(char c, char *str)
 {

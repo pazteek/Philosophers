@@ -6,7 +6,7 @@
 /*   By: gbabeau <gbabeau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 14:43:39 by gbabeau           #+#    #+#             */
-/*   Updated: 2021/07/09 15:36:17 by gbabeau          ###   ########.fr       */
+/*   Updated: 2021/07/19 17:24:49 by gbabeau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ typedef struct s_chrono
 	int				number_of_each;
 	int				status;
 	int				etat;
+	int 			finish;
 	long long		time;
 	long long		start;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t	general;
-	pthread_mutex_t	display;
+	pthread_mutex_t	*general;
+	pthread_mutex_t	*display;
 }	t_chrono;
 
 typedef struct s_philosopher
@@ -50,18 +51,17 @@ typedef struct s_philosopher
 	pthread_t		thread_id;
 	pthread_t		display_id;
 	int				fork[2];
-	pthread_mutex_t	general;
-	pthread_mutex_t	display;
+	pthread_mutex_t	*general;
+	pthread_mutex_t	*display;
 	t_chrono		*chrono;
 }	t_philosopher;
 
 void				*test( void *arg);
 void				*test_to_live( void *arg);
 void				init_philosophers(int number_of_philosopher,
-						t_chrono *all, t_philosopher *philosophers,
-						pthread_mutex_t *general);
+						t_chrono *all, t_philosopher *philosophers);
 long long			ft_time(void);
-int					display(t_philosopher philosophers, char *etat);
+int					display(t_philosopher *philosophers, char *etat);
 void				ft_putnbr_fd(int nb, int fd);
 long long			ft_time(void);
 void				ft_usleep(long long time, long long time_2);
